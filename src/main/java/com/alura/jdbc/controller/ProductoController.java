@@ -15,7 +15,7 @@ import java.sql.Statement;
 
 public class ProductoController {
 	public int modificar(String nombre, String descripcion, Integer cantidad, Integer id) throws SQLException {
-		// TODO
+
 		final Connection con = new ConnectionRefactory().recuperarConexionDB();
 		try (con) {
 			final PreparedStatement statement = con.prepareStatement(
@@ -34,12 +34,8 @@ public class ProductoController {
 	}
 
 	public Integer eliminar(Integer id) throws SQLException {
-		// TODO
+
 		final Connection con = new ConnectionRefactory().recuperarConexionDB();
-		/**
-		 * Se usa prepated statement para tener mas seguridad en el control de los
-		 * querys enviados al la base de datos
-		 */
 		try (con) {
 			final PreparedStatement statement = con.prepareStatement("DELETE FROM productos" + " where id = ?");
 			try (statement) {
@@ -53,7 +49,7 @@ public class ProductoController {
 	}
 
 	public List<Map<String, String>> listar() throws SQLException {
-		// TODO
+
 		final Connection con = new ConnectionRefactory().recuperarConexionDB();
 		try (con) {
 			final PreparedStatement statement = con
@@ -83,7 +79,6 @@ public class ProductoController {
 		Integer cantidad = Integer.valueOf(producto.get("CANTIDAD"));
 		Integer cantidadMaxStock = 50;
 
-		// TODO
 		final Connection con = new ConnectionRefactory().recuperarConexionDB();
 
 		try (con) { // es un try-whit-resources
@@ -98,10 +93,9 @@ public class ProductoController {
 					cantidad -= cantidadMaxStock;
 				} while (cantidad > 0);
 				con.commit(); // confirmar la ejecucion de guardar cuando no hay problemas
-				System.out.println("commit");
+
 			} catch (Exception e) {
 				con.rollback();
-				System.out.println("rollback");
 				/*
 				 * se realiza este rollback, por lo que deshace los cambios realizados en la
 				 * trasaccion actual con la conexion a la base de datos
@@ -115,8 +109,7 @@ public class ProductoController {
 
 	private void execGuardar(String nombre, String descripcion, Integer cantidad, PreparedStatement statement)
 			throws SQLException {
-		if (cantidad < 50)
-			throw new RuntimeException("Ocurrio un error");
+
 		statement.setString(1, nombre);
 		statement.setString(2, descripcion);
 		statement.setInt(3, cantidad);
@@ -125,7 +118,7 @@ public class ProductoController {
 		final ResultSet resultSet = statement.getGeneratedKeys();
 		try (resultSet) {
 			while (resultSet.next()) {
-				System.out.printf("Fue insertado el producto con ID: %d \n", resultSet.getInt(1));
+				//System.out.printf("Fue insertado el producto con ID: %d \n", resultSet.getInt(1));
 
 			}
 		}
