@@ -26,7 +26,6 @@ public class ProductoController {
 				statement.setInt(3, cantidad);
 				statement.setInt(4, id);
 				statement.execute();
-
 				int updateCount = statement.getUpdateCount();
 				return updateCount;
 			}
@@ -36,6 +35,7 @@ public class ProductoController {
 	public Integer eliminar(Integer id) throws SQLException {
 
 		final Connection con = new ConnectionRefactory().recuperarConexionDB();
+
 		try (con) {
 			final PreparedStatement statement = con.prepareStatement("DELETE FROM productos" + " where id = ?");
 			try (statement) {
@@ -51,15 +51,17 @@ public class ProductoController {
 	public List<Map<String, String>> listar() throws SQLException {
 
 		final Connection con = new ConnectionRefactory().recuperarConexionDB();
+
 		try (con) {
 			final PreparedStatement statement = con
 					.prepareStatement("SELECT ID, NOMBRE" + ", DESCRIPCION" + ", CANTIDAD" + " FROM productos");
-			try (statement) {
 
+			try (statement) {
 				statement.execute();
 
 				ResultSet resultSet = statement.getResultSet();
 				List<Map<String, String>> resultado = new ArrayList<>();
+
 				while (resultSet.next()) {
 					Map<String, String> fila = new HashMap<>();
 					fila.put("ID", String.valueOf(resultSet.getInt("ID")));
@@ -68,12 +70,14 @@ public class ProductoController {
 					fila.put("CANTIDAD", String.valueOf(resultSet.getInt("CANTIDAD")));
 					resultado.add(fila);
 				}
+
 				return resultado;
 			}
 		}
 	}
 
 	public void guardar(Map<String, String> producto) throws SQLException {
+
 		String nombre = producto.get("NOMBRE");
 		String descripcion = producto.get("DESCRIPCION");
 		Integer cantidad = Integer.valueOf(producto.get("CANTIDAD"));
@@ -83,19 +87,23 @@ public class ProductoController {
 
 		try (con) { // es un try-whit-resources
 			con.setAutoCommit(false);// tomar el control de las trasacciones de ejecucion y evitar errores
+
 			final PreparedStatement statement = con.prepareStatement(
 					"INSERT INTO PRODUCTOS" + "(nombre, descripcion, cantidad) " + " values (?,?,?)",
 					Statement.RETURN_GENERATED_KEYS);
 			try (statement) {
+
 				do {
 					int cantidadAguardar = Math.min(cantidad, cantidadMaxStock);
 					execGuardar(nombre, descripcion, cantidadAguardar, statement);
 					cantidad -= cantidadMaxStock;
 				} while (cantidad > 0);
+
 				con.commit(); // confirmar la ejecucion de guardar cuando no hay problemas
 
 			} catch (Exception e) {
 				con.rollback();
+
 				/*
 				 * se realiza este rollback, por lo que deshace los cambios realizados en la
 				 * trasaccion actual con la conexion a la base de datos
@@ -122,11 +130,5 @@ public class ProductoController {
 
 			}
 		}
-		resultSet.close();
-		/*
-		 * Libera la base de datos y los recursos JDBC de este objeto ResultSet
-		 * inmediatamente en lugar de esperar a que esto ocurra cuando se cierra
-		 * automáticamente.
-		 */
 	}
 }
