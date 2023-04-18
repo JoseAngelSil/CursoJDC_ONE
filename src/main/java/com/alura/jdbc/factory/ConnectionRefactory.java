@@ -9,7 +9,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class ConnectionRefactory {
 	private DataSource dataSource;
-	
+
 	public ConnectionRefactory() {
 		// manejo de pool de conexiones y datasource para la conexion
 		var poolDataSource = new ComboPooledDataSource();
@@ -19,7 +19,7 @@ public class ConnectionRefactory {
 		poolDataSource.setMaxPoolSize(10); // establecer 10 conexiones como maximo
 		this.dataSource = poolDataSource;
 	}
-	
+
 	public Connection recuperarConexionDB() throws SQLException {
 		return this.dataSource.getConnection();
 	}
