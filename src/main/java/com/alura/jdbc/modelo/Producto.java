@@ -20,7 +20,14 @@ public class Producto {
         this.cantidad = cantidad;
     }
     
-    public Integer getId() {
+    public Producto(int id, String nombre, int cantidad) {
+		// TODO Auto-generated constructor stub
+    	this.id = id;
+    	this.nombre = nombre;
+    	this.cantidad = cantidad;
+	}
+
+	public Integer getId() {
         return id;
     }
 

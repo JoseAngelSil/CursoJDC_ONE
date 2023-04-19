@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alura.jdbc.modelo.Categoria;
+import com.alura.jdbc.modelo.Producto;
 
 public class CategoriaDAO {
 	final Connection con;
@@ -26,7 +27,8 @@ public class CategoriaDAO {
 				final ResultSet exeQuery = statement.executeQuery();
 				try (exeQuery) {
 					while (exeQuery.next()) {
-						Categoria getCategoria = new Categoria((Integer) exeQuery.getInt("id"),(String) exeQuery.getString("nombre"));
+						Categoria getCategoria = new Categoria((Integer) exeQuery.getInt("id"),
+								(String) exeQuery.getString("nombre"));
 						resultado.add((Categoria) getCategoria);
 					}
 				}
@@ -40,5 +42,39 @@ public class CategoriaDAO {
 		return resultado;
 	}
 
+	public List<Categoria> listarConProductos() {
+		List<Categoria> resultado = new ArrayList<Categoria>();
+
+		try {
+			final PreparedStatement statement = this.con
+					.prepareStatement("Select c.id, c.nombre, p.id , p.nombre, p.cantidad from categoria as c"
+							+ " inner join productos p on c.id = p.categoria_id");
+			try (statement) {
+				final ResultSet exeQuery = statement.executeQuery();
+				try (exeQuery) {
+					while (exeQuery.next()) {
+						Integer idCategoria = exeQuery.getInt("id");
+						String nombreCategoria = exeQuery.getString("nombre");
+						var getCategoria = resultado.stream().filter(cat -> cat.getId().equals(idCategoria)).findAny()
+								.orElseGet(() -> {
+									Categoria cate = new Categoria(idCategoria, nombreCategoria);
+									resultado.add(cate);
+									return cate;
+								});
+						Producto producto = new Producto(exeQuery.getInt("p.id"), exeQuery.getString("p.nombre"),
+								exeQuery.getInt("p.cantidad"));
+						
+						getCategoria.agregar(producto);
+					}
+				}
+			}
+
+		} catch (SQLException e) {
+			// TODO: handle exception
+			throw new RuntimeException(e);
+		}
+
+		return resultado;
+	}
 
 }

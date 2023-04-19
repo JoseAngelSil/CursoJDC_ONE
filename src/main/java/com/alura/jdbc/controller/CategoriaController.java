@@ -1,7 +1,6 @@
 package com.alura.jdbc.controller;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.alura.jdbc.dao.CategoriaDAO;
@@ -28,8 +27,7 @@ public class CategoriaController {
 		return categoriaDAO.listar();
 	}
 
-    public List<?> cargaReporte() {
-        // TODO
-        return new ArrayList<>();
+    public List<Categoria> cargaReporte() {
+        return this.categoriaDAO.listarConProductos();
     }
 }

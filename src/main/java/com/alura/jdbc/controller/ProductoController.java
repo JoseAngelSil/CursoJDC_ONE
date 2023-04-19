@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.alura.jdbc.dao.ProductoDAO;
 import com.alura.jdbc.factory.ConnectionRefactory;
+import com.alura.jdbc.modelo.Categoria;
 import com.alura.jdbc.modelo.Producto;
 
 public class ProductoController {
@@ -30,6 +31,10 @@ public class ProductoController {
 
 	public List<Producto> listar() {
 		return productoDao.listar();
+	}
+	
+	public List<Producto> listar(Categoria categoria){
+		return productoDao.listar(categoria.getId());
 	}
 
 	public void guardar(Producto producto, Integer categoriaID) {
