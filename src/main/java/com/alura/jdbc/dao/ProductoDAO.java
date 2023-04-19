@@ -21,13 +21,14 @@ public class ProductoDAO {
 		try {
 			PreparedStatement statement;
 			statement = con.prepareStatement(
-					"INSERT INTO PRODUCTOS " + "(nombre, descripcion, cantidad)" + " VALUES (?, ?, ?)",
+					"INSERT INTO PRODUCTOS " + "(nombre, descripcion, cantidad, categoria_id)" + " VALUES (?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 
 			try (statement) {
 				statement.setString(1, producto.getNombre());
 				statement.setString(2, producto.getDescripcion());
 				statement.setInt(3, producto.getCantidad());
+				statement.setInt(4, producto.getCategoriaID());
 
 				statement.execute();
 

@@ -22,6 +22,7 @@ import org.w3c.dom.ranges.RangeException;
 
 import com.alura.jdbc.controller.CategoriaController;
 import com.alura.jdbc.controller.ProductoController;
+import com.alura.jdbc.modelo.Categoria;
 import com.alura.jdbc.modelo.Producto;
 
 public class ControlDeStockFrame extends JFrame {
@@ -29,7 +30,7 @@ public class ControlDeStockFrame extends JFrame {
 
 	private JLabel labelNombre, labelDescripcion, labelCantidad, labelCategoria;
 	private JTextField textoNombre, textoDescripcion, textoCantidad;
-	private JComboBox<Object> comboCategoria;
+	private JComboBox<Categoria> comboCategoria;
 	private JButton botonGuardar, botonModificar, botonLimpiar, botonEliminar, botonReporte;
 	private JTable tabla;
 	private DefaultTableModel modelo;
@@ -101,11 +102,11 @@ public class ControlDeStockFrame extends JFrame {
 		textoDescripcion = new JTextField();
 		textoCantidad = new JTextField();
 		comboCategoria = new JComboBox<>();
-		comboCategoria.addItem("Elige una Categoría");
+		comboCategoria.addItem(new Categoria(0, "Elige la categoria"));
 
 		// TODO
 		var categorias = this.categoriaController.listar();
-		// categorias.forEach(categoria -> comboCategoria.addItem(categoria));
+		categorias.forEach(categoria -> comboCategoria.addItem(categoria));
 
 		textoNombre.setBounds(10, 25, 265, 20);
 		textoDescripcion.setBounds(10, 65, 265, 20);
@@ -244,9 +245,9 @@ public class ControlDeStockFrame extends JFrame {
 		var producto = new Producto(textoNombre.getText(), textoDescripcion.getText(), cantidadInt);
 
 		// TODO
-		var categoria = comboCategoria.getSelectedItem();
+		var categoria = (Categoria) comboCategoria.getSelectedItem();
 
-		this.productoController.guardar(producto);
+		this.productoController.guardar(producto, categoria.getId());
 
 		JOptionPane.showMessageDialog(this, "Registrado con éxito!");
 

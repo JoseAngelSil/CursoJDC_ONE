@@ -32,7 +32,8 @@ public class ProductoController {
 		return productoDao.listar();
 	}
 
-	public void guardar(Producto producto) {
+	public void guardar(Producto producto, Integer categoriaID) {
+		producto.setCategoriaID(categoriaID);
 		productoDao.guardar(producto);
 	}
 }

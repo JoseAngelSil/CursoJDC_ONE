@@ -5,6 +5,7 @@ public class Producto {
     private String nombre;
     private String descripcion;
     private Integer cantidad;
+    private Integer categoriaID;
 
     public Producto(String nombre, String descripcion, Integer cantidad) {
         this.nombre = nombre;
@@ -33,6 +34,11 @@ public class Producto {
 
     public Integer getCantidad() {
         return cantidad;
+        
+    }
+    
+    public Integer getCategoriaID() {
+    	return this.categoriaID;
     }
 
     public void setId(Integer id) {
@@ -45,6 +51,10 @@ public class Producto {
                 "{ id: %d, nombre: %s, descripcion: %s, cantidad: %d }",
                 this.id, this.nombre, this.descripcion, this.cantidad);
     }
+
+	public void setCategoriaID(Integer categoriaID) {
+		this.categoriaID = categoriaID;
+	}
 	
 	
 }
